@@ -4,6 +4,7 @@ import com.cloud.blogservice.model.Picture;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -20,4 +21,5 @@ public class BlogDto {
     private LocalDateTime date;
     private String authorName;
     private Set<Picture> pictures;
+    private List<CommentDto> comments;
 }

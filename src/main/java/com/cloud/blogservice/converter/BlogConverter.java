@@ -25,6 +25,7 @@ public class BlogConverter extends BaseConverter<BlogDto, Blog> {
     @Override
     public Blog fromDtoToEntity(BlogDto dto) {
         return Blog.builder()
+                .blogId(dto.getBlogId())
                 .title(dto.getTitle())
                 .category(CategoryEnum.valueOf(dto.getCategory()))
                 .content(dto.getContent())

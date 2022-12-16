@@ -4,7 +4,6 @@ package com.cloud.blogservice.controller;
 import com.cloud.blogservice.converter.BlogConverter;
 import com.cloud.blogservice.dto.BlogDto;
 import com.cloud.blogservice.dto.CommentDto;
-import com.cloud.blogservice.dto.ResponseDto;
 import com.cloud.blogservice.model.Blog;
 import com.cloud.blogservice.model.Picture;
 import com.cloud.blogservice.service.BlogService;
@@ -42,10 +41,12 @@ public class BlogController {
 
     @GetMapping("/{blogId}")
     @CircuitBreaker(name = "blogWithComments", fallbackMethod = "getBlogWithCommentsFallback")
-    public ResponseEntity<ResponseDto> getById(@PathVariable("blogId") Long blogId) {
+    public ResponseEntity<BlogDto> getById(@PathVariable("blogId") Long blogId) {
         Blog blog = blogService.findById(blogId);
         List<CommentDto> comments = commentServiceProxy.getAllCommentsByBlogId(blogId).getBody();
-        return ResponseEntity.ok(new ResponseDto(blogConverter.fromEntityToDto(blog), comments));
+        BlogDto blogDto = blogConverter.fromEntityToDto(blog);
+        blogDto.setComments(comments);
+        return ResponseEntity.ok(blogDto);
     }
 
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
