@@ -6,14 +6,8 @@ import com.cloud.blogservice.repository.BlogRepository;
 import com.cloud.blogservice.service.BlogService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +20,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> findAll() {
-        List<Blog> blogs = new LinkedList<>();
-        blogRepository.findAll().iterator().forEachRemaining(blogs::add);
-        return blogs;
+        return blogRepository.findAll();
     }
 
     @Override
@@ -45,30 +37,6 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Blog save(Blog blog) {
         return blogRepository.save(blog);
-    }
-
-    @Override
-    public Page<Blog> findPaginated(Pageable pageable) {
-        List<Blog> blogs = findAll();
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Blog> list;
-        if (blogs.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, blogs.size());
-            list = blogs.subList(startItem, toIndex);
-        }
-        Page<Blog> blogPage = new PageImpl<>(list, PageRequest.of(currentPage,
-                pageSize), blogs.size());
-        return blogPage;
-    }
-
-
-    @Override
-    public Page<Blog> findPaginatedAndSorted(Pageable pageable) {
-        return blogRepository.findAll(pageable);
     }
 
     @Override
