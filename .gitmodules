@@ -1,3 +1,12 @@
 [submodule "comment-service"]
 	path = comment-service
 	url = https://github.com/AAVacaru/comment-service
+[submodule "search-service"]
+	path = search-service
+	url = https://github.com/AAVacaru/search-service
+[submodule "eureka-server"]
+	path = eureka-server
+	url = https://github.com/AAVacaru/eureka-server
+[submodule "spring-blog-frontend"]
+	path = spring-blog-frontend
+	url = https://github.com/AAVacaru/spring-blog-frontend
