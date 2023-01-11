@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:latest
+    container_name: mysqldb
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: blog_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_TCP_PORT: 3306
+  mysqldb2:
+    image: mysql:latest
+    container_name: mysqldb2
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: comment_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_TCP_PORT: 3306
+  eureka-server:
+    image: eureka-server
+    container_name: eurekaserver-docker-container
+    ports:
+      - 8761:8761
+    environment:
+      eureka.instance.hostname: eureka-server
+      eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka
+  blog-service:
+    image: blog-service
+    container_name: blogservice-docker-container
+    ports:
+      - 8080:8080
+    environment:
+      server.port: 8080
+      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+    depends_on:
+      - mysqldb
+      - eureka-server
+  comment-service:
+    image: comment-service
+    container_name: commentservice-docker-container
+    ports:
+      - 8081:8081
+    environment:
+      server.port: 8081
+      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+    depends_on:
+      - mysqldb2
+      - eureka-server
+  search-service:
+    image: search-service
+    container_name: searchservice-docker-container
+    ports:
+      - 8082:8082
+    environment:
+      server.port: 8082
+      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
+    depends_on:
+      - eureka-server
+  angular-service:
+    image: sha256:40273f869e5fab00b2009ff787a2a1923147b0f042588bd49dc0b022cb7b7ae6
+    container_name: angular-container
+    ports:
+      - "4200:4200"
+    command: >
+      bash -c "npm start"
