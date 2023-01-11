@@ -1,0 +1,3 @@
+[submodule "comment-service"]
+	path = comment-service
+	url = https://github.com/AAVacaru/comment-service
